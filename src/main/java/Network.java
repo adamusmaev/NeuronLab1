@@ -44,6 +44,7 @@ public class Network {
     }
 
     public void backPropagation(Double actualValue){
+        nullifySum();
         Double mistakeValue = actualValue- levelList.get(2).getNeuronList().get(0).getFunctionValue();
         levelList.get(2).getNeuronList().get(0).setMistakeValue(mistakeValue);
 
@@ -58,17 +59,19 @@ public class Network {
             for (int j = 0; j < levelList.get(1).getNeuronList().size(); j++){
                 Neuron nOutput = levelList.get(1).getNeuronList().get(j);
                 Synapse synapse = findSynapse(nInput, nOutput);
-                Double newValue = synapse.getSynapseWeight() + 0.1*nOutput.getMistakeValue() * 1/(1+Math.pow(Math.E, -nOutput.getSumSynapseWeight()))
-                        *(1 - 1/(1+Math.pow(Math.E, -nOutput.getSumSynapseWeight()))) * nInput.getFunctionValue();
+                Double newValue = synapse.getSynapseWeight() + 0.1*nOutput.getMistakeValue() *nOutput.getFunctionValue()*(1 - nOutput.getFunctionValue()) * nInput.getFunctionValue();
                 synapse.setSynapseWeight(newValue);
+
+                //Double newValue = synapse.getSynapseWeight() + 0.1*nOutput.getMistakeValue() * 1/(1+Math.pow(Math.E, -nOutput.getSumSynapseWeight()))
+                //        *(1 - 1/(1+Math.pow(Math.E, -nOutput.getSumSynapseWeight()))) * nInput.getFunctionValue();
+                //synapse.setSynapseWeight(newValue);
             }
         }
         Neuron nOutput = levelList.get(2).getNeuronList().get(0);
         for (int i = 0; i < levelList.get(1).getNeuronList().size(); i++){
             Neuron nInput = levelList.get(1).getNeuronList().get(i);
             Synapse synapse = findSynapse(nInput, nOutput);
-            Double newValue = synapse.getSynapseWeight() + 0.01*nOutput.getMistakeValue() * 1/(1+Math.pow(Math.E, -nOutput.getSumSynapseWeight()))
-                    *(1 - 1/(1+Math.pow(Math.E, -nOutput.getSumSynapseWeight()))) * nInput.getFunctionValue();
+            Double newValue = synapse.getSynapseWeight() + 0.1*nOutput.getMistakeValue() *nOutput.getFunctionValue()*(1 - nOutput.getFunctionValue()) * nInput.getFunctionValue();
             synapse.setSynapseWeight(newValue);
         }
     }
@@ -78,5 +81,13 @@ public class Network {
             if (synapseList.get(i).getInputNeron().equals(nInput) && synapseList.get(i).getOutputNeuron().equals(nOutput)) return synapseList.get(i);
         }
         return null;
+    }
+
+    public void nullifySum(){
+        for( int i = 0; i < levelList.size(); i++){
+            for (int j = 0; j < levelList.get(i).getNeuronList().size(); j++){
+                levelList.get(i).getNeuronList().get(j).setSumSynapseWeight(0.0);
+            }
+        }
     }
 }

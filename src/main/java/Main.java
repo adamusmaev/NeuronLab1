@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -37,12 +38,12 @@ public class Main {
 
         network.addRandomWeightForSynapse();
 
-        for (int i = 0; i <1; i++) {
+        for (int i = 0; i < 10000; i++) {
             level1.getNeuronList().get(0).setFunctionValue(0.980);
             level1.getNeuronList().get(1).setFunctionValue(0.977);
             level1.getNeuronList().get(2).setFunctionValue(0.941);
             level1.getNeuronList().get(3).setFunctionValue(0.090);
-            level1.getNeuronList().get(4).setFunctionValue(0.1);
+            level1.getNeuronList().get(4).setFunctionValue(0.0);
             network.sumValue();
             network.backPropagation(0.9);
 
@@ -60,29 +61,36 @@ public class Main {
             level1.getNeuronList().get(3).setFunctionValue(0.5);
             level1.getNeuronList().get(4).setFunctionValue(1.0);
             network.sumValue();
-            network.backPropagation(0.66);
+            network.backPropagation(0.5);
 
 
-            level1.getNeuronList().get(0).setFunctionValue(0.99);
-            level1.getNeuronList().get(1).setFunctionValue(0.99);
-            level1.getNeuronList().get(2).setFunctionValue(0.99);
-            level1.getNeuronList().get(3).setFunctionValue(0.001);
-            level1.getNeuronList().get(4).setFunctionValue(0.1);
+        }
+        Scanner in = new Scanner(System.in);
+            System.out.println("Введите размых крыльев");
+            Double value1 = (in.nextDouble() - 10) / (35.5 - 10);
+
+            System.out.println("Введите макс. взлётную массу");
+            Double value2 = (in.nextDouble() - 27) / (72 - 27);
+
+            System.out.println("Введите максимальная грузоподъёмность");
+            Double value3 = (in.nextDouble() - 3) / (20 - 3);
+
+            System.out.println("Введите максимальная скорость");
+            Double value4 = (in.nextDouble() - 800) / (2400 - 800);
+
+            System.out.println("Имеется ли оружие");
+            Double value5 = in.nextDouble();
+
+            level1.getNeuronList().get(0).setFunctionValue(value1);
+            level1.getNeuronList().get(1).setFunctionValue(value2);
+            level1.getNeuronList().get(2).setFunctionValue(value3);
+            level1.getNeuronList().get(3).setFunctionValue(value4);
+            level1.getNeuronList().get(4).setFunctionValue(value5);
             network.sumValue();
-            network.backPropagation(1.0);
 
-        }
-        level1.getNeuronList().get(0).setFunctionValue(0.27);
-        level1.getNeuronList().get(1).setFunctionValue(0.36);
-        level1.getNeuronList().get(2).setFunctionValue(0.41);
-        level1.getNeuronList().get(3).setFunctionValue(0.5);
-        level1.getNeuronList().get(4).setFunctionValue(1.0);
-        network.sumValue();
-        network.backPropagation(0.66);
+            System.out.println(network.getLevelList().get(2).getNeuronList().get(0).getFunctionValue());
 
-        for (int i = 0; i < network.getLevelList().size(); i++) {
-            System.out.println(network.getLevelList().get(i));
-        }
+
     }
 
 }
